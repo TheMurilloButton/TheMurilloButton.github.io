@@ -28,6 +28,20 @@
   <p id="save-msg" style="color:green;font-size:16px;"></p>
 </div>
 
+<div style="margin-top:40px;">
+  <p>Leaderboard refresh interval (in seconds).</p>
+  
+  <label style="font-size:18px;">Interval: </label>
+  <input type="number" id="leaderboard-interval" value="1" min="0.5" step="0.5" style="width:60px;font-size:16px;padding:4px;">
+  <span style="font-size:16px;">seconds</span>
+  
+  <br><br>
+  
+  <button onclick="saveInterval()" style="font-family:'Times New Roman',sans-serif;font-size:16px;padding:6px 16px;cursor:pointer;">Save</button>
+  
+  <p id="interval-msg" style="color:green;font-size:16px;"></p>
+</div>
+
 <script>
   const saved = localStorage.getItem('bgColour');
   if (saved) {
@@ -52,6 +66,22 @@
     document.getElementById('settings-body').style.background = '#ffffff';
     document.getElementById('save-msg').textContent = 'Reset to white ✅';
     setTimeout(() => document.getElementById('save-msg').textContent = '', 2000);
+  }
+
+  const savedInterval = localStorage.getItem('leaderboardInterval');
+  if (savedInterval) {
+    document.getElementById('leaderboard-interval').value = savedInterval;
+  }
+
+  function saveInterval() {
+    const interval = parseFloat(document.getElementById('leaderboard-interval').value);
+    if (interval >= 0.5) {
+      localStorage.setItem('leaderboardInterval', interval);
+      document.getElementById('interval-msg').textContent = 'Saved! Refresh page to apply ✅';
+      setTimeout(() => document.getElementById('interval-msg').textContent = '', 2000);
+    } else {
+      document.getElementById('interval-msg').textContent = 'Minimum interval is 0.5 seconds';
+    }
   }
 </script>
 </body>

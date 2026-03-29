@@ -213,16 +213,12 @@
       if (error) throw error;
       
       if (data && data.length > 0) {
-        fameData = data.map(row => ({ name: row.name, score: row.score }));
-        renderFame();
-      } else {
-        fameData = [];
+        const newData = data.map(row => ({ name: row.name, score: row.score }));
+        fameData = newData;
         renderFame();
       }
     } catch (e) {
       console.log('Error fetching leaderboard:', e);
-      fameData = [];
-      renderFame();
     }
   }
 
@@ -246,6 +242,8 @@
     console.log(`Added ${name} with ${displayScore} points to leaderboard!`);
   };
 
+  let leaderboardInterval = parseFloat(localStorage.getItem('leaderboardInterval')) || 1;
+
   function renderFame() {
     const list = document.getElementById('fame-list');
     if (fameData.length === 0) {
@@ -262,8 +260,13 @@
     const displayScore = superPoints > 0 ? superPoints : Math.floor(points);
     pushToLeaderboard(name, displayScore);
   }
+
+  function startLeaderboardRefresh() {
+    syncLeaderboard();
+    setInterval(syncLeaderboard, leaderboardInterval * 1000);
+  }
   
-  syncLeaderboard();
+  startLeaderboardRefresh();
   renderFame();
   updateDisplay();
 </script>
